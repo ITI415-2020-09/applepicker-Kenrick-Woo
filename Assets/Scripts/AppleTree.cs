@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class AppleTree : MonoBehaviour {
+public class AppleTree : MonoBehaviour
+{
     [Header("Set in Inspector")]
     // Prefab for instantiating apples
     public GameObject applePrefab;
@@ -20,16 +22,34 @@ public class AppleTree : MonoBehaviour {
     // Rate at which Apples will be instantiate
     public float secondsBetweenAppleDrop = 1f;
 
-    void Start() {
+    void Start()
+    {
         // Dropping apples every second
     }
 
-    void Update() {
+    void Update()
+    {
         // Basic Movement
         Vector3 pos = transform.position;
         pos.x += speed * Time.deltaTime;
         transform.position = pos;
 
         // Changing Direction
+        if (pos.x < -leftAndRightEdge)
+        {
+            speed = Mathf.Abs(speed); // Move right
+        }
+        else if (pos.x > leftAndRightEdge)
+        {
+            speed = -Mathf.Abs(speed); // Move left
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if (Random.value < chanceToChangeDirection)
+        {
+            speed *= -1; // Change direction
+        }
     }
 }
